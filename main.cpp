@@ -31,13 +31,15 @@ int main(){
     const int maxFrames{6};
     const float updateTime{1.f/12.f};
     //target fps
-    SetTargetFPS(60);
+    SetTargetFPS(160);
 
     //game loop
     while(!WindowShouldClose()){
         BeginDrawing();
         ClearBackground(WHITE);
         Vector2 direction{};
+        if(IsKeyDown(KEY_LEFT_SHIFT)) speed = 6.f;
+        else speed = 4.f;
         if(IsKeyDown(KEY_A)) direction.x -= 1.f; 
         if(IsKeyDown(KEY_D)) direction.x += 1.f;
         if(IsKeyDown(KEY_W)) direction.y -= 1.f;
