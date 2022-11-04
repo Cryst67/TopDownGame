@@ -10,6 +10,7 @@ int main()
     InitWindow(windowWidth, windowHeight, "Top-Down Game");
     Texture2D map = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
     Vector2 mapPos{0.f, 0.0f};
+    const float mapScale = 4.0f;
     
     Character knight;
     knight.setScreenPos(windowWidth, windowHeight);
@@ -25,6 +26,14 @@ int main()
 
         DrawTextureEx(map, mapPos, 0.f, 4.f, WHITE);
         knight.tick(GetFrameTime());
+
+        if(knight.getWorldPos().x < 0.f ||
+           knight.getWorldPos().y < 0.f ||
+           knight.getWorldPos().x + windowWidth > map.width * mapScale||
+           knight.getWorldPos().y + windowHeight > map.height * mapScale)
+           {
+            knight.undoMovement();
+           }
 
         EndDrawing();
     }
