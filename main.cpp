@@ -2,6 +2,8 @@
 #include "raymath.h"
 #include "character.h"
 #include "prop.h"
+#include "enemy.h"
+
 int main()
 {
     // window initialization
@@ -14,7 +16,7 @@ int main()
     
     Character knight{windowWidth, windowHeight};
     SetTargetFPS(160);
-
+    Enemy goblin{Vector2{0.f, 0.f}, LoadTexture("characters/goblin_idle_spritesheet.png"), LoadTexture("characters/goblin_run_spritesheet.png")};
     Prop props[2]{
         Prop{Vector2{600.f, 300.f}, LoadTexture("nature_tileset/Rock.png")},
         Prop{Vector2{400.f, 500.f}, LoadTexture("nature_tileset/Log.png")}
@@ -35,7 +37,6 @@ int main()
         }
 
         knight.tick(GetFrameTime());
-
         if(knight.getWorldPos().x < 0.f ||
            knight.getWorldPos().y < 0.f ||
            knight.getWorldPos().x + windowWidth > map.width * mapScale||
@@ -45,8 +46,7 @@ int main()
            }
 
         for(auto prop : props) if(CheckCollisionRecs(prop.GetCollisionRec(knight.getWorldPos()), knight.GetCollisionRec())) knight.undoMovement(); 
-
-
+        goblin.tick(GetFrameTime());
         EndDrawing();
     }
     UnloadTexture(map);
