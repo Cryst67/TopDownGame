@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "character.h"
-
+#include "prop.h"
 int main()
 {
     // window initialization
@@ -12,9 +12,13 @@ int main()
     Vector2 mapPos{0.f, 0.0f};
     const float mapScale = 4.0f;
     
-    Character knight;
-    knight.setScreenPos(windowWidth, windowHeight);
+    Character knight{windowWidth, windowHeight};
     SetTargetFPS(160);
+
+    Prop props[2]{
+        Prop{Vector2{600.f, 300.f}, LoadTexture("nature_tileset/Rock.png")},
+        Prop{Vector2{400.f, 500.f}, LoadTexture("nature_tileset/Log.png")}
+    };
 
     // game loop
     while (!WindowShouldClose())
@@ -25,6 +29,11 @@ int main()
         mapPos = Vector2Scale(knight.getWorldPos(), -1.f);
 
         DrawTextureEx(map, mapPos, 0.f, 4.f, WHITE);
+
+        for(auto prop: props){
+            prop.render(knight.getWorldPos());
+        }
+
         knight.tick(GetFrameTime());
 
         if(knight.getWorldPos().x < 0.f ||
@@ -34,6 +43,9 @@ int main()
            {
             knight.undoMovement();
            }
+
+        for(auto prop : props) if(CheckCollisionRecs(prop.GetCollisionRec(knight.getWorldPos()), knight.GetCollisionRec())) knight.undoMovement(); 
+
 
         EndDrawing();
     }
